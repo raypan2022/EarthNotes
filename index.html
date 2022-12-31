@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EarthNotes</title>
   <link rel="stylesheet" href="main.css"/>
-  <script src="app.js"></script>
+  <script src="js/app.js"></script>
 </head>
 <body>
   <div class="page">
@@ -16,10 +16,12 @@
       <input id='location' class='location-control' type='text' placeholder="Enter country or a city"/>
     </div>
     <div id='side-menu' class="sidebar"></div>
+    <div class="notes-area"></div>
     <div id="map"></div>
     <div class="marker-control">
-      <button>Move</button>
-      <button>Remove</button>
+      <button id="move-control">Move</button>
+      <button id="remove-control">Remove</button>
+      <button id="cancel-control">Cancel</button>
     </div>
   </div>
 </body>

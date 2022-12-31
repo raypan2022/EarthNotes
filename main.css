@@ -5,8 +5,7 @@
 }
 
 .page {
-  width: 1200px;
-  height: 620px;
+  height: 100vh;
   margin: 0 auto;
   background-color: lightblue;
 }
@@ -15,7 +14,7 @@
   background-color: lightblue;
   text-align: center;
   padding: 20px;
-  height: 80px;
+  height: 13%;
   box-sizing: content-box;
 }
 
@@ -30,8 +29,8 @@ label,
 
 .sidebar {
   float: left;
-  width: 200px;
-  height: 400px;
+  width: 15%;
+  height: 60%;
   padding: 20px 20px 0 20px;
   background-color: rgb(184, 169, 169);
   border: 2px solid blue;
@@ -45,30 +44,40 @@ label,
 
 .sidebar::-webkit-scrollbar-thumb {
   margin-top: 20px;
-  background-color: red;
-  border-radius: 0.2vw;
+  background-color: white;
 }
 
 .sidebar::-webkit-scrollbar-track {
   margin-top: 20px;
-  background-color: blue;
-  border-radius: 0.2vw 0.2vw 0 0;
+  background-color: darkslategray;
 }
 
 .marker-control {
   clear: left;
   background-color: lightslategrey;
-  width: 200px;
-  height: 100px;
+  width: 15%;
+  height: 10%;
   border-left: 2px solid blue;
   border-right: 2px solid blue;
   border-bottom: 2px solid blue;
   border-radius: 0 0 30px 30px;
 }
 
+#cancel-control {
+  display: block;
+}
+
 #map {
   float: right;
-  height: 500px;
-  width: 1000px;
+  height: 70%;
+  width: 55%;
   border-radius: 20px;
+}
+
+.notes-area {
+  float: right;
+  height: 70%;
+  width: 30%;
+  border-radius: 20px;
+  background-color: white;
 }
