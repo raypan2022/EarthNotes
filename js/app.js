@@ -27,135 +27,26 @@ function initMap() {
   
   // Useful variables, initialized here 
   var markerNum = 0
-
-  const markerStyle = 'display: block; background-color: darkred; color: white;margin: 0 auto;';
-
   var markers = [];
   var markerRefer = new WeakMap();
   var moveMode = false;
   var deleteMode = false;
-  var overNotes = false;
-
-
-  // creating my custome notes box
-  class USGSOverlay extends google.maps.OverlayView {
-    topLeft;
-    curMarker;
-    div;
-    constructor(topLeft, curMarker) {
-      super();
-      this.topLeft = topLeft;
-      this.curMarker = curMarker;
-    }
-
-    onAdd() {
-      this.div = document.createElement("div");
-      this.div.style.position = "absolute";
-      this.div.style.height = "200px";
-      this.div.style.width = "300px";
-      this.div.style.backgroundColor = 'white';
-
-      const notesBox = document.createElement("textarea");
-      notesBox.rows = 10;
-      notesBox.cols = 30;
-      notesBox.style.padding = "10px";
-
-      this.div.appendChild(notesBox);
-
-      const close = document.createElement('button')
-      close.innerText = 'X';
-      close.onclick = () => {this.hide();};
-      close.style.position = 'absolute';
-      close.style.top = 0;
-      close.style.right = 0;
-      close.style.padding = '5px';
-
-      this.div.appendChild(close);
-
-      this.div.onmouseover = function() {
-        overNotes = true;
-        map.setOptions({scrollwheel: false});
-      };
-      this.div.onmouseout = function() {
-        overNotes = false;
-        map.setOptions({scrollwheel: true});
-      };
-
-      // still have not figured out how to bring marker to front
-      // also have to figure out how to make notes follow the marker
-      this.div.onclick = () => {
-        markers.forEach(function(marker) {
-          marker.setZIndex(0);
-          markerRefer.get(marker)[0].div.style.zIndex = "0";
-        });
-        this.div.style.zIndex = "1";
-        this.curMarker.setZIndex(1);
-      };
-      notesBox.onclick = () => {
-        map.panTo({lat:this.topLeft.lat(),lng:this.topLeft.lng() + (60 / 2 ** (newZoom - 1))});
-      };
-
-      const panes = this.getPanes();
-
-      panes.floatPane.appendChild(this.div);
-    }
-
-    draw() {
-      const overlayProjection = this.getProjection();
-      const pixel = overlayProjection.fromLatLngToDivPixel(
-        this.topLeft
-      );
-
-      this.div.style.left = pixel.x + 20 + 'px';
-      this.div.style.top = pixel.y - 100 + 'px';
-      
-    }
-
-    onRemove() {
-      if (this.div) {
-        this.div.parentNode.removeChild(this.div);
-        delete this.div;
-      }
-    }
-    /**
-     *  Set the visibility to 'hidden' or 'visible'.
-     */
-    hide() {
-      if (this.div) {
-        this.div.style.visibility = "hidden";
-      }
-    }
-    show() {
-      if (this.div) {
-        this.div.style.visibility = "visible";
-      }
-    }
-  }
 
 
   // add marker and notes on click
   google.maps.event.addListener(map, 'click', 
   function(event) {
-    console.log(overNotes);
-    if (!overNotes) {
-      addMarker({coords: event.latLng});
-    }
+    addMarker({coords: event.latLng});
   });
-
-
-  // add notes function
-  function createNote(location, curMarker) {
-    const overlay = new USGSOverlay(location, curMarker);
-    overlay.setMap(map);
-    return overlay;
-  }
-
 
   // Add markers function 
   function addMarker(props) {
+    markers.forEach((marker) => {marker.setIcon("http://maps.google.com/mapfiles/kml/paddle/red-circle.png")});
+
     var marker = new google.maps.Marker({
       position: props.coords,
       map: map,
+      icon: "http://maps.google.com/mapfiles/kml/paddle/blu-circle.png",
       draggable: false,
     });
 
@@ -163,35 +54,83 @@ function initMap() {
       marker.setIcon(props.iconImg);
     }
 
+
+    // removing previous content in the notes area
+    function clearNotes() {
+      var notes = document.getElementById('notes')
+    while (notes.firstChild) {
+      notes.removeChild(notes.lastChild);
+    }
+    }
+    clearNotes();
+
+  
+    // creating the text area corresponding with the marker
+    var noteTitle = document.createElement('textarea')
+    var noteBody = document.createElement('textarea');
+    noteTitle.rows = 2;
+    noteTitle.style.fontFamily = "sans-serif";
+    noteTitle.style.resize = "none";
+    noteTitle.style.fontSize = "40px";
+    noteTitle.style.color = "#5F6A6A";
+    noteTitle.style.fontWeight = "bold";
+    noteTitle.style.width = "100%";
+    noteTitle.style.borderRadius = "20px";
+    noteTitle.style.boxShadow = "none";
+    noteTitle.style.border = "none";
+    noteTitle.style.outline = "none";
+    noteTitle.style.padding = "10px"
+    noteTitle.placeholder = "Enter a title...";
+    noteBody.placeholder = "Write something in the notes body...";
+    noteBody.style.display = "block";
+    noteBody.style.border = "none";
+    noteBody.style.padding = "10px";
+    noteBody.style.boxShadow = "none";
+    noteBody.style.overflow = "auto";
+    noteBody.style.outline = "none";
+    noteBody.style.resize = "none";
+    noteBody.style.width = "100%";
+    noteBody.style.height = "80%";
+    noteBody.style.fontSize = "16px";
+    notes.append(noteTitle, noteBody);
+    notesPair = {
+      title: noteTitle,
+      body: noteBody
+    };
+
+
     // creating the marker buttons
     var newButton = document.createElement('button');
     markerNum++;
     newButton.innerText = 'marker' + markerNum;
-    newButton.style.cssText = markerStyle;
-    newButton.onclick = () => map.panTo({lat:props.coords.lat(),lng:props.coords.lng() + (60 / 2 ** (newZoom - 1))});
+    newButton.classList.add("button");
+    newButton.onclick = () => {
+      map.panTo({lat:props.coords.lat(),lng:props.coords.lng()});
+      clearNotes();
+      notes.append(noteTitle, noteBody);
+      markers.forEach((marker) => {marker.setIcon("http://maps.google.com/mapfiles/kml/paddle/red-circle.png")});
+      marker.setIcon("http://maps.google.com/mapfiles/kml/paddle/blu-circle.png");
+    };
     sideBar = document.getElementById('side-menu');
     sideBar.appendChild(newButton);
-
+    
 
     markers.push(marker);
-    markerRefer.set(marker, [createNote(props.coords, marker), newButton]);
+    markerRefer.set(marker, [notesPair, newButton]);
     
     marker.addListener('click', function() {
       if (deleteMode) {
         marker.setMap(null);
-        markerRefer.get(marker)[0].setMap(null);
+        clearNotes();
         markerRefer.get(marker)[1].remove();
       } else {
-        map.panTo({lat:props.coords.lat(),lng:props.coords.lng() + (60 / 2 ** (newZoom - 1))});
-        markerRefer.get(marker)[0].show();
+        clearNotes();
+        markers.forEach((marker) => {marker.setIcon("http://maps.google.com/mapfiles/kml/paddle/red-circle.png")});
+        marker.setIcon("http://maps.google.com/mapfiles/kml/paddle/blu-circle.png");
+        notes.append(markerRefer.get(marker)[0].title, markerRefer.get(marker)[0].body);
+        map.panTo({lat:props.coords.lat(),lng:props.coords.lng()});
       }
     });
-
-
-    // attempting to bring one box on top of another
-    // markerRefer.get(marker)[0].addListener('click' , function() {
-    //   markerRefer.get(marker)[0].setZIndex = 100;
-    // });
 
 
     // moves camera closer to marker
@@ -200,7 +139,7 @@ function initMap() {
         newZoom = map.getZoom() * 1.4;
         map.setZoom(newZoom);
       }
-      map.panTo({lat:location.lat(),lng:location.lng() + (60 / 2 ** (newZoom - 1))});
+      map.panTo({lat:location.lat(),lng:location.lng()});
     }
 
 

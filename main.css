@@ -5,12 +5,14 @@
 }
 
 .page {
+  padding: 0 50px 50px 50px;
   height: 100vh;
   margin: 0 auto;
   background-color: lightblue;
 }
 
 .top {
+  font-family: sans-serif;
   background-color: lightblue;
   text-align: center;
   padding: 20px;
@@ -33,9 +35,34 @@ label,
   height: 60%;
   padding: 20px 20px 0 20px;
   background-color: rgb(184, 169, 169);
-  border: 2px solid blue;
   border-radius: 30px 30px 0 0;
   overflow-y: scroll;
+}
+
+.sidebar .button {
+  display: block; 
+  width: 80%; 
+  background-color: #7B68EE; 
+  color: white;
+  margin: 0 auto 10px; 
+  padding: 5px; 
+  border-radius: 10px; 
+  box-shadow: 5px 5px black; 
+  border: none; 
+  outline: none; 
+  font-size: 20px;
+}
+
+.sidebar .button:hover {
+  background-color: #483D8B;
+}
+
+.sidebar .button:active {
+  background-color: red;
+  box-shadow: none;
+  position: relative;
+  top: 5px;
+  left: 5px;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -56,27 +83,53 @@ label,
   clear: left;
   background-color: lightslategrey;
   width: 15%;
-  height: 10%;
-  border-left: 2px solid blue;
-  border-right: 2px solid blue;
-  border-bottom: 2px solid blue;
+  height: 20%;
   border-radius: 0 0 30px 30px;
+}
+
+.control-button {
+  color: black;
+  background-color: #8FBC8B;
+  font-size: 18px;
+  border-radius: 14px;
+  box-shadow: 5px 5px black; 
+  border: none; 
+  outline: none; 
+  padding: 5px;
+}
+
+.control-button:hover {
+  background-color: #556B2F;
+}
+
+.control-button:active {
+  background-color: red;
+  box-shadow: none;
+  position: relative;
+  top: 5px;
+  left: 5px;
+}
+
+.top-control {
+  margin: 20px auto;
+  text-align: center;
 }
 
 #cancel-control {
   display: block;
+  margin: 10px auto;
 }
 
 #map {
   float: right;
-  height: 70%;
+  height: 80%;
   width: 55%;
   border-radius: 20px;
 }
 
 .notes-area {
   float: right;
-  height: 70%;
+  height: 80%;
   width: 30%;
   border-radius: 20px;
   background-color: white;
